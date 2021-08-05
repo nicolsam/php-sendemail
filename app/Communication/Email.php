@@ -85,6 +85,7 @@ class Email {
             // Envia o Email
             return $obMail->send();
 
+            
         } catch(PHPMailerException $error) {
             $this->error = $error->getMessage();
             return false;
