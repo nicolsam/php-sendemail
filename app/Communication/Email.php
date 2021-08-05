@@ -50,7 +50,40 @@ class Email {
             $obMail->Port = getenv('SMTP_PORT');
             $obMail->CharSet = getenv('SMTP_CHARSET');
 
-            
+            // Remetente
+            $obMail->setFrom(getenv('SMTP_FROM_EMAIL'), getenv('SMTP_FROM_NAME'));
+
+            // Destinatários
+            $addresses = is_array($addresses) ? $addresses : [$addresses];
+            foreach($addresses as $address) {
+                $obMail->addAddress($address);
+            }
+
+            // Anexos
+            $attachments = is_array($attachments) ? $attachments : [$attachments];
+            foreach($attachments as $attachment) {
+                $obMail->addAttachment($attachment);
+            }
+
+            // CCs
+            $ccs = is_array($ccs) ? $ccs : [$ccs];
+            foreach($ccs as $cc) {
+                $obMail->addCC($cc);
+            }
+
+            // BCCs
+            $bccs = is_array($bccs) ? $bccs : [$bccs];
+            foreach($bccs as $bcc) {
+                $obMail->addBCC($bcc);
+            }
+
+            // Conteúdo do EMAIL
+            $obMail->isHTML(true);
+            $obMail->Subject = $subject;
+            $obMail->Body = $body;
+
+            // Envia o Email
+            return $obMail->send();
 
         } catch(PHPMailerException $error) {
             $this->error = $error->getMessage();
